@@ -1,26 +1,15 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="h-screen flex flex-col divide-y items-between justify-stretch items-stretch">
+    <div class="grow">
+      <router-view ></router-view>
+    </div>
+    <div class="flex justify-stretch divide-x">
+      <router-link class="grow p-4 text-center" active-class="text-white bg-indigo-500" to="/">home</router-link>
+      <router-link class="grow p-4 text-center" active-class="text-white bg-indigo-500" to="/detail">detail</router-link>
+      <router-link class="grow p-4 text-center" active-class="text-white bg-indigo-500" to="/test">test</router-link>
+    </div>
+  </div>
 </template>
+<script setup>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
