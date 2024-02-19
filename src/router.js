@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageHome from '@/components/PageHome';
 import PageDetail from '@/components/PageDetail';
-import PageTest from '@/components/PageTest';
+import PageSetting from '@/components/PageSetting';
 const routes = [
   { path: '/', component: PageHome },
   { path: '/detail', component: PageDetail },
-  { path: '/test', component: PageTest },
+  { path: '/setting', component: PageSetting },
 ];
 
 const router = createRouter({
