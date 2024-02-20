@@ -11,15 +11,36 @@ export const useSettingStore = defineStore('setting', {
   state: () => ({
     currencyList: [],
     query: '',
-    preferCurrency: 'USD',
+    preferCurrency: 'USD_USD',
     preferRate: 1,
   }),
   getters: {
     filteredCurrencyList: (state) => {
       const reg = new RegExp(state.query, 'ig');
-      return state.currencyList.filter((x) => {
-        return reg.test(x.pair) || reg.test(x.fullName);
-      });
+
+      return state.currencyList
+        .filter((x) => {
+          return reg.test(x.pair) || reg.test(x.fullName);
+        })
+        .map((x) => {
+          let [from, to] = _.split(x.pair, '_');
+          let rate = x.rate;
+          if (_.toLower(from) === 'usd') {
+            let temp = from;
+            from = to;
+            to = temp;
+            rate = 1 / rate;
+          }
+
+          return {
+            ...x,
+            abbr: x.pair.replace(/(USD_)|(_USD)/g, ''),
+            active: x.pair === state.preferCurrency,
+            from,
+            to,
+            rate,
+          };
+        });
     },
   },
   actions: {
