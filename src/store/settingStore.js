@@ -8,17 +8,21 @@ import _ from 'lodash';
 // and `Store` (e.g. `useUserStore`, `useCartStore`, `useProductStore`)
 // the first argument is a unique id of the store across your application
 export const useSettingStore = defineStore('setting', {
-  state: () => ({
-    currencyList: [],
-    query: '',
-    preferCurrency: 'USD_USD',
-    preferRate: 1,
-  }),
+  state: () => {
+    const preferCurrency = localStorage.getItem('preferCurrency') || 'USD_USD';
+    const preferRateStr = localStorage.getItem('preferRate');
+    const preferRate = preferRateStr ? +preferRateStr : 1;
+    return {
+      currencyList: [],
+      query: '',
+      preferCurrency,
+      preferRate,
+    };
+  },
   getters: {
     filteredCurrencyList: (state) => {
       const reg = new RegExp(state.query, 'ig');
-
-      return state.currencyList
+      const formattedCurrencyList = state.currencyList
         .filter((x) => {
           return reg.test(x.pair) || reg.test(x.fullName);
         })
@@ -41,6 +45,18 @@ export const useSettingStore = defineStore('setting', {
             rate,
           };
         });
+      formattedCurrencyList.unshift({
+        pair: 'USD_USD',
+        symbol: '$',
+        fullName: 'US Dollar',
+        imageUrl: 'https://public.bnbstatic.com/image/currencies/USD.png',
+        abbr: 'USD',
+        active: 'USD_USD' === state.preferCurrency,
+        from: 'USD',
+        to: 'USD',
+        rate: 1,
+      });
+      return formattedCurrencyList;
     },
   },
   actions: {

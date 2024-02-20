@@ -12,32 +12,14 @@
 import BN from 'bignumber.js'
 import BetterScroll from 'better-scroll'
 import { nextTick, onMounted, ref } from 'vue';
-import { apiGetAllSymbolPrice, apiGetCurrencyRate } from '@/api/index'
-import _ from 'lodash'
+import { apiGetAllSymbolPrice } from '@/api/index'
 
 const list = ref([])
 const wrapper = ref()
 const bs = ref()
-const curencyList = ref([])
 onMounted(() => {
-  const localCurrencyListStr = localStorage.getItem('currencyList')
-  if (!localCurrencyListStr) {
-    apiGetCurrencyRate().then(resp => {
-      if (resp.data && resp.data.success) {
-        localStorage.setItem('currencyList', JSON.stringify(resp.data.data))
-      }
-    })
-  } else {
-    const localCurrencyList = JSON.parse(localCurrencyListStr)
-    curencyList.value = localCurrencyList
-  }
-  
-  apiGetAllSymbolPrice({ symbols: '["ETHUSDT","BTCUSDT","BATUSDT"]' }).then(resp => {
-    if (_.isArray(resp.data)) {
-      list.value = resp.data
-    } else {
-      list.value = [resp.data]
-    }
+  apiGetAllSymbolPrice({ symbols: '["ETHUSDT","BTCUSDT"]' }).then(resp => {
+    list.value = resp.data
     nextTick(() => {
       bs.value = new BetterScroll(wrapper.value, {
         scrollY: true,

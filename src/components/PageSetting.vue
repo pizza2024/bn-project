@@ -23,6 +23,7 @@
   </div>
   <div class="h-14 fixed top-0 inset-x-0 bg-white flex items-center p-2">
     <input v-model="settingStore.query" class="border border-black p-2 grow rounded-lg"/>
+    <IconXCircle v-if="!!settingStore.query" class="fixed right-4 inset-y-center" @click="settingStore.query = ''"/>
   </div>
 </template>
 
@@ -32,6 +33,7 @@ import {useSettingStore} from '@/store/settingStore'
 import { nextTick, onMounted, ref } from 'vue';
 import BetterScroll from 'better-scroll'
 import IconCheck from '@/components/IconCheck.vue'
+import IconXCircle from '@/components/IconXCircle.vue'
 const bs = ref()
 const wrapper = ref()
 const settingStore = useSettingStore()
@@ -56,5 +58,7 @@ onMounted(() => {
 function selectCurrency(x) {
   settingStore.preferCurrency = x.pair
   settingStore.preferRate = x.rate
+  window.localStorage.setItem('preferCurrency', x.pair)
+  window.localStorage.setItem('preferRate', x.rate)
 }
 </script>
