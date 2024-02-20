@@ -1,5 +1,7 @@
 import { apiGetCurrencyRate } from '@/api';
 import { defineStore } from 'pinia';
+// eslint-disable-next-line no-unused-vars
+import _ from 'lodash';
 
 // You can name the return value of `defineStore()` anything you want,
 // but it's best to use the name of the store and surround it with `use`
@@ -8,8 +10,18 @@ import { defineStore } from 'pinia';
 export const useSettingStore = defineStore('setting', {
   state: () => ({
     currencyList: [],
+    query: '',
+    preferCurrency: 'USD',
+    preferRate: 1,
   }),
-  getter: {},
+  getters: {
+    filteredCurrencyList: (state) => {
+      const reg = new RegExp(state.query, 'ig');
+      return state.currencyList.filter((x) => {
+        return reg.test(x.pair) || reg.test(x.fullName);
+      });
+    },
+  },
   actions: {
     async queryCurrencyList() {
       const resp = await apiGetCurrencyRate();
